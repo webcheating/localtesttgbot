@@ -1,0 +1,7 @@
+python-dotenv
+aiogram
+sqlalchemy
+gino
+psycopg2
+datetime
+googlemaps

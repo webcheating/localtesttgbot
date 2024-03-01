@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: database
+    image: sameersbn/postgresql:10-2
+    environment:
+      DB_NAME: $db_name
+      PG_PASSWORD: $db_password 
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - botnet
+# Uncomment volumes if you need locate db on local host
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  bot_tg:
+    container_name: bot
+    build:
+      context: .
+    command: python main.py
+    networks:
+      - botnet
+    restart: always
+    env_file:
+      - ".env"
+    # bot start after load db
+    depends_on:
+      - db
+
+
+networks:
+  botnet:
+    # указывается драйвер сети
+    driver: bridge
